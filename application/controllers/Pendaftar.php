@@ -13,6 +13,7 @@ class Pendaftar extends CI_Controller {
 
 	public function index()
 	{
+        $data["pemira"] = $this->db->get_where('pemira', ["YEAR(waktu_input)" => date('Y')])->row();
         $data["info"] = $this->db->get_where('pendaftaran', ["id" => "pendaftaran"])->row();
         $this->load->view('Pendaftar/index',$data);
     }

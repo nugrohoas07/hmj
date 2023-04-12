@@ -66,11 +66,11 @@
                         <?= $info->persyaratan ?>
                     </div>
                     <?php
-                    if($info->link_persyaratan){
+                    if ($info->link_persyaratan) {
                     ?>
-                    <div class="card-footer text-center">
-                        <a class="btn btn-primary" href="<?= $info->link_persyaratan ?>" target="_blank">Download Persyaratan</a>
-                    </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-primary" href="<?= $info->link_persyaratan ?>" target="_blank">Download Persyaratan</a>
+                        </div>
                     <?php
                     }
                     ?>
@@ -117,6 +117,29 @@
                     </div>
                 </div>
             <?php } ?>
+            <div class="card card-primary text-center">
+                <div class="card-header">
+                    Jadwal PEMIRA <?= date('Y') ?>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><b>Kampanye Tulis</b></p>
+                    <p class="card-text"><?= tanggal_indo($pemira->kamp_tulis_awal)." s/d ".tanggal_indo($pemira->kamp_tulis_akhir) ?></p>
+                    <p class="card-text"><b>Kampanye Lisan</b></p>
+                    <p class="card-text"><?= to_date_time($pemira->kamp_lisan) ?></p>
+                    <p class="card-text"><?= $pemira->lok_lisan ?></p>
+                    <p class="card-text"><b>Debat Calon</b></p>
+                    <p class="card-text"><?= to_date_time($pemira->debat) ?></p>
+                    <p class="card-text"><?= $pemira->lok_debat ?></p>
+                    <p class="card-text"><b>Pemilu Raya</b></p>
+                    <p class="card-text"><?= to_date_time($pemira->pemilihan) ?></p>
+                    <p class="card-text"><?= $pemira->lok_pemilihan ?></p>
+                    <p class="card-text"><b>Pengumuman</b></p>
+                    <p class="card-text"><?= $pemira->pengumuman ?></p>
+                </div>
+                <div class="card-footer text-center">
+                    
+                </div>
+            </div>
         </div>
     </section>
 </div>
