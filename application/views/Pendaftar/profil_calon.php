@@ -35,7 +35,7 @@
                             </li>
                         </ul>
                         <a href="detail_calon/<?= $row->nim ?>" class="btn btn-primary btn-block"><b>Lihat Profil</b></a>
-                        <a href="Pendaftar/review_calon" class="btn btn-warning btn-block"><b>Review Calon</b></a>
+                        <a href="review_calon" class="btn btn-warning btn-block"><b>Review Calon</b></a>
                     </div>
                 </div>
             </div>

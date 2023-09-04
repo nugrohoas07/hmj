@@ -1,29 +1,31 @@
 <?php section('contents'); ?>
 <?php
-    $status=NULL;
-    $tulis=NULL;
-    $lisan=NULL;
-    $l_lisan=NULL;
-    $debat=NULL;
-    $l_debat=NULL;
-    $suara=NULL;
-    $l_suara=NULL;
-    $pengumuman=NULL;
-    $info=NULL;
-    if(!empty($pemira)){
-        $tulis_start=us_date($pemira->kamp_tulis_awal);
-        $tulis_end=us_date($pemira->kamp_tulis_akhir);
-        $tulis=$tulis_start." - ".$tulis_end;
-        $status=$pemira->status;
-        $lisan=$pemira->kamp_lisan;
-        $l_lisan=$pemira->lok_lisan;
-        $debat=$pemira->debat;
-        $l_debat=$pemira->lok_debat;
-        $suara=$pemira->pemilihan;
-        $l_suara=$pemira->lok_pemilihan;
-        $pengumuman=$pemira->pengumuman;
-        $info=$pemira->keterangan;
-    }
+$status = NULL;
+$tulis = NULL;
+$lisan = NULL;
+$l_lisan = NULL;
+$debat = NULL;
+$l_debat = NULL;
+$suara = NULL;
+$suara_end = NULL;
+$l_suara = NULL;
+$pengumuman = NULL;
+$info = NULL;
+if (!empty($pemira)) {
+    $tulis_start = us_date($pemira->kamp_tulis_awal);
+    $tulis_end = us_date($pemira->kamp_tulis_akhir);
+    $tulis = $tulis_start . " - " . $tulis_end;
+    $status = $pemira->status;
+    $lisan = $pemira->kamp_lisan;
+    $l_lisan = $pemira->lok_lisan;
+    $debat = $pemira->debat;
+    $l_debat = $pemira->lok_debat;
+    $suara = $pemira->pemilihan;
+    $suara_end = $pemira->pemilihan_akhir;
+    $l_suara = $pemira->lok_pemilihan;
+    $pengumuman = $pemira->pengumuman;
+    $info = $pemira->keterangan;
+}
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -52,8 +54,8 @@
                                 <div class="form-group">
                                     <label>PEMIRA</label>
                                     <select id="stat_pemira" name="status" class="form-control select2-nosearch" style="width: 100%;" data-validation="required">
-                                        <option value="0" <?php if($status=="0") echo "selected" ?> >Non Aktif</option>
-                                        <option value="1" <?php if($status=="1") echo "selected" ?> >Aktif</option>
+                                        <option value="0" <?php if ($status == "0") echo "selected" ?>>Non Aktif</option>
+                                        <option value="1" <?php if ($status == "1") echo "selected" ?>>Aktif</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -114,10 +116,19 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Lokasi Pemungutan Suara</label>
-                                            <input autocomplete="off" type="text" value="<?= $l_suara ?>" name="lokasi_pemilihan" class="form-control" placeholder="Lokasi pemungutan suara" data-validation="required" />
+                                            <label>Waktu Akhir Pemungutan Suara</label>
+                                            <div class="input-group date" id="pemilihan_end" data-target-input="nearest">
+                                                <input type="text" name="pemilihan_end" value="<?= $suara_end ?>" class="form-control datetimepicker-input" data-target="#pemilihan_end" />
+                                                <div class="input-group-append" data-target="#pemilihan_end" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Lokasi Pemungutan Suara</label>
+                                    <input autocomplete="off" type="text" value="<?= $l_suara ?>" name="lokasi_pemilihan" class="form-control" placeholder="Lokasi pemungutan suara/link e-voting" data-validation="required" />
                                 </div>
                                 <div class="form-group">
                                     <label>Pengumuman Hasil Suara</label>
@@ -147,7 +158,7 @@
 <?php endsection(); ?>
 <?php section('scripts') ?>
 <script>
-    var ktulis_start,ktulis_end;
+    var ktulis_start, ktulis_end;
     $('.textareacustom').summernote({
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -159,19 +170,15 @@
     });
     $(function() {
         $('#ktulis').daterangepicker();
-        $('#klisan').datetimepicker({
+        $('#klisan,#debat,#pemilihan').datetimepicker({
             format: 'YYYY-MM-DD HH:mm',
             sideBySide: true,
             debug: true
         });
-        $('#debat').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm',
-            sideBySide: true,
-            debug: true
-        });
-        $('#pemilihan').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm',
-            sideBySide: true,
+        $('#pemilihan_end').datetimepicker({
+            format: 'LT',
+            format: 'HH:mm',
+            useCurrent: false,
             debug: true
         });
         $('#pengumuman').datetimepicker({
@@ -181,9 +188,10 @@
             debug: true
         });
     });
-    function onSubmit(){
-        ktulis_start=  $("#ktulis").data('daterangepicker').startDate.format('YYYY-MM-DD');
-        ktulis_end=  $("#ktulis").data('daterangepicker').endDate.format('YYYY-MM-DD');
+
+    function onSubmit() {
+        ktulis_start = $("#ktulis").data('daterangepicker').startDate.format('YYYY-MM-DD');
+        ktulis_end = $("#ktulis").data('daterangepicker').endDate.format('YYYY-MM-DD');
         document.formdp.ktulis0.value = ktulis_start;
         document.formdp.ktulis1.value = ktulis_end;
         document.forms["formdp"].submit();

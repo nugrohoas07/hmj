@@ -99,6 +99,7 @@ class Model_pemira extends CI_Model
         $this->debat = $post["debat"];
         $this->lok_debat = $post["lokasi_debat"];
         $this->pemilihan = $post["pemilihan"];
+        $this->pemilihan_akhir = $post["pemilihan_end"];
         $this->lok_pemilihan = $post["lokasi_pemilihan"];
         $this->pengumuman = $post["pengumuman"];
         $this->keterangan = $post["info"];
