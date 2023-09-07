@@ -17,10 +17,9 @@ class Model_pemira extends CI_Model
     }
 
     //mendapatkan calon single
-    function getSpesificCalon()
+    function getSpesificCalon($nim)
     {
-        $this->db->where('YEAR(waktu_input)', date('Y'));
-        return $this->db->get('calon_ketua')->result();
+        return $this->db->get_where('calon_ketua', ["nim" => $nim])->row();
     }
 
     //menambahkan calon ketua
@@ -109,5 +108,106 @@ class Model_pemira extends CI_Model
         } else {
             return $this->db->insert('pemira', $this);
         }
+    }
+
+    function getKriteria()
+    {
+        return $this->db->get('kriteria')->result();
+    }
+    
+    function inputReviewCalon()
+    {
+        $post = $this->input->post();
+        $id_user = $this->session->userdata("username");
+        $id_calon = $post["id_calon"];
+        $id_kriteria = $post["id_kriteria"];
+        $nilai_kriteria = $post["nilai_kriteria"];
+        $komentar = $post["komentar"];
+        $anonim = isset($_POST['anonim']) ? 1 : 0;
+        foreach($id_kriteria as $key => $id)
+        {
+            if(!empty($nilai_kriteria[$key]))
+            {
+                $data = array(
+                    'id_user' => $id_user,
+                    'id_calon' => $id_calon,
+                    'id_kriteria' => $id,
+                    'nilai' => $nilai_kriteria[$key]
+                );
+                if($this->cekNilai($id_user,$id_calon,$id))
+                {
+                    $this->db->where('id_user', $id_user);
+                    $this->db->where('id_calon', $id_calon);
+                    $this->db->where('id_kriteria', $id);
+                    $this->db->update('nilai_calon', $data);
+                }else {
+                    $this->db->insert('nilai_calon', $data);
+                }
+            }else {
+                if($this->cekNilai($id_user,$id_calon,$id)){
+                    $this->db->where('id_user', $id_user);
+                    $this->db->where('id_calon', $id_calon);
+                    $this->db->where('id_kriteria', $id);
+                    $this->db->delete('nilai_calon');
+                }
+            }
+        }
+        if(!empty($komentar))
+        {
+            $komen = array(
+                'id_user' => $id_user,
+                'id_calon' => $id_calon,
+                'komentar' => $komentar,
+                'anonim' => $anonim
+            );
+            if($this->cekReview($id_user, $id_calon))
+            {
+                $this->db->where('id_user', $id_user);
+                $this->db->where('id_calon', $id_calon);
+                $this->db->update('komentar', $komen);
+            }else {
+                return $this->db->insert('komentar', $komen);
+            }
+        }else {
+            if($this->cekReview($id_user, $id_calon))
+            {
+                $this->db->where('id_user', $id_user);
+                $this->db->where('id_calon', $id_calon);
+                $this->db->delete('komentar');
+            }
+        }
+    }
+
+    function cekNilai($user_id, $calon_id, $id_kriteria)
+    {
+        $this->db->where('id_user', $user_id);
+        $this->db->where('id_calon', $calon_id);
+        $this->db->where('id_kriteria', $id_kriteria);
+        $result = $this->db->get('nilai_calon');
+        return $result->num_rows() > 0 ? true : false;
+    }
+
+    function cekReview($user_id, $calon_id)
+    {
+        $this->db->where('id_user', $user_id);
+        $this->db->where('id_calon', $calon_id);
+        $result = $this->db->get('komentar');
+        return $result->num_rows() > 0 ? true : false;
+    }
+
+    function getKomentarByUser($calon_id)
+    {
+        $user_id = $this->session->userdata("username");
+        $this->db->where('id_user', $user_id);
+        $this->db->where('id_calon', $calon_id);
+        return $this->db->get('komentar')->row();
+    }
+
+    function getNilaiByUser($calon_id)
+    {
+        $user_id = $this->session->userdata("username");
+        $this->db->where('id_user', $user_id);
+        $this->db->where('id_calon', $calon_id);
+        return $this->db->get('nilai_calon')->result();
     }
 }

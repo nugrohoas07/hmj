@@ -77,13 +77,29 @@ class Pendaftar extends CI_Controller {
 
     public function detail_calon($nim)
     {
-        $data["calon"] = $this->db->get_where('calon_ketua', ["nim" => $nim])->row();
+        $data["calon"] = $this->model_pemira->getSpesificCalon($nim);
         $this->load->view('Pendaftar/detail_calon', $data);
     }
 
-    public function review_calon()
+    public function review_calon($nim)
     {
-        $this->load->view('Pendaftar/review');
+        $data["calon"] = $this->model_pemira->getSpesificCalon($nim);
+        $data["kriteria"] = $this->model_pemira->getKriteria();
+        $data["komentar"] = $this->model_pemira->getKomentarByUser($nim);
+        $data["nilai"] = $this->model_pemira->getNilaiByUser($nim);
+        $this->load->view('Pendaftar/review', $data);
+    }
+
+    public function input_ulasan()
+    {
+        if (isset($_POST['simpan'])) {
+            $this->model_pemira->inputReviewCalon();
+            if ($this->toastr->success('Berhasil Review')) {
+            } else {
+                $this->toastr->error('Gagal Review');
+            }
+            redirect('Pendaftar/profil_calon');
+        }
     }
 
     public function spk()
