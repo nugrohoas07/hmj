@@ -104,7 +104,19 @@ class Pendaftar extends CI_Controller {
 
     public function spk()
     {
-        $this->load->view('Pendaftar/spk');
+        $data["kriteria"] = $this->model_pemira->getKriteria();
+        $this->load->view('Pendaftar/spk', $data);
     }
-    
+
+    public function input_bobot()
+    {
+        if (isset($_POST['simpan'])) {
+            $this->model_pemira->inputBobot();
+            if ($this->toastr->success('Berhasil Bobot')) {
+            } else {
+                $this->toastr->error('Gagal Bobot');
+            }
+            redirect('Pendaftar/spk');
+        }
+    }
 }

@@ -30,6 +30,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="<?php echo base_url('assets') ?>/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?php echo base_url('assets') ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="<?php echo base_url('assets') ?>/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="<?php echo base_url('assets') ?>/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
@@ -124,6 +126,8 @@
     <script src="<?php echo base_url('assets') ?>/plugins/bootstrap-slider/bootstrap-slider.min.js"></script>
     <!-- Select2 -->
     <script src="<?php echo base_url('assets') ?>/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="<?php echo base_url('assets') ?>/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
     <!-- ChartJS -->
     <script src="<?php echo base_url('assets') ?>/plugins/chart.js/Chart.min.js"></script>
     <!-- Sparkline -->

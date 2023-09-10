@@ -37,10 +37,25 @@
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-one-tabContent">
                                 <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>List Kriteria</label>
+                                                <select class="duallistbox" multiple="multiple">
+                                                    <?php foreach ($kriteria as $krit) : ?>
+                                                        <option value="<?= $krit->id ?>"><?= $krit->kriteria ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                    <form role="form" action="<?= site_url('pendaftar/input_bobot') ?>" class="form-submit" method="post">
+                                        <div id="dynamic-form"></div>
+                                        <input type="hidden" name="simpan">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                     Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
@@ -50,7 +65,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.card -->
                     </div>
                 </div>
             </div>
@@ -62,16 +76,56 @@
 
 <?php section('scripts'); ?>
 <script>
-    $('.range_5').ionRangeSlider({
-        min: 0,
-        max: 5,
-        type: 'single',
-        step: 1,
-        prettify: false,
-        grid: true,
-        grid_num: 5,
-        skin: 'round'
-    })
+
+    $(document).ready(function() {
+        var kriteria = {};
+        <?php foreach ($kriteria as $data) { ?>
+        kriteria[<?= $data->id; ?>] = '<?= $data->kriteria; ?>';
+        <?php } ?>
+
+        $('.duallistbox').bootstrapDualListbox()
+
+        $('.range_5').ionRangeSlider({
+            min: 0,
+            max: 5,
+            type: 'single',
+            step: 1,
+            prettify: false,
+            grid: true,
+            grid_num: 5,
+            skin: 'round'
+        })
+
+        $('.duallistbox').change(function() {
+            var selectedValues = $('.duallistbox').val()
+
+            $('#dynamic-form').empty();
+
+            selectedValues.forEach(function(value, index) {
+                var labelText = kriteria[value] + " (%)";
+                var placeholderText = 'Nilai ' + kriteria[value];
+
+                var formGroup = $('<div>').addClass('form-group');
+
+                var labelElement = $('<label>').text(labelText);
+
+                var inputHidden = $('<input>').attr('type', 'hidden').attr('name', 'id_kriteria[]').val(value)
+
+                var inputElement = $('<input>')
+                    .attr('type', 'text')
+                    .addClass('form-control')
+                    .attr('name', 'bobot[]')
+                    .attr('placeholder', placeholderText)
+                    .attr('data-validation', 'required');
+
+                formGroup.append(labelElement);
+                formGroup.append(inputHidden);
+                formGroup.append(inputElement);
+
+                $('#dynamic-form').append(formGroup);
+            })
+        });
+    });
 </script>
 <?php endsection(); ?>
 <?php getview('template/core') ?>

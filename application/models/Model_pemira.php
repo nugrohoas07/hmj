@@ -210,4 +210,21 @@ class Model_pemira extends CI_Model
         $this->db->where('id_calon', $calon_id);
         return $this->db->get('nilai_calon')->result();
     }
+
+    function inputBobot()
+    {
+        $post = $this->input->post();
+        $user_id = $this->session->userdata("username");
+        $id_kriteria = $post["id_kriteria"];
+        $bobot = $post["bobot"];
+        foreach($id_kriteria as $krit => $id)
+        {
+            $data = array (
+                'id_user' => $user_id,
+                'id_kriteria' => $id,
+                'bobot' => $bobot[$krit]
+            );
+            $this->db->insert('bobot', $data);
+        }
+    }
 }
