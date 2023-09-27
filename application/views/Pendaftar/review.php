@@ -1,12 +1,11 @@
 <?php section('contents'); ?>
 <?php
-    $nilai_kriteria = array();
-    foreach($nilai as $row)
-    {
-        $nilai_kriteria[$row->id_kriteria] = $row->nilai;
-    }
-    $komen = !empty($komentar->komentar) ? $komentar->komentar : "";
-    $anonim = !empty($komentar->anonim) ? $komentar->anonim : "";
+$nilai_kriteria = array();
+foreach ($nilai as $row) {
+    $nilai_kriteria[$row->id_kriteria] = $row->nilai;
+}
+$komen = !empty($komentar->komentar) ? $komentar->komentar : "";
+$anonim = !empty($komentar->anonim) ? $komentar->anonim : "";
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -37,15 +36,22 @@
                                     <h5><i class="icon fas fa-info"></i>Info</h5>
                                     Info alert preview. This alert is dismissable.
                                 </div>
-                                <?php foreach ($kriteria as $row) : ?>
                                 <div class="form-group">
-                                    <label for="range"><?= $row->kriteria ?></label>
-                                    <div class="col-sm-4">
-                                        <input type="hidden" name="id_kriteria[]" value="<?= $row->id ?>">
-                                        <input class="range_5" type="text" name="nilai_kriteria[]" value="<?= !empty($nilai_kriteria[$row->id]) ? $nilai_kriteria[$row->id] : "" ?>">
+                                    <div class="row">
+                                        <?php $count = 0; ?>
+                                        <?php foreach ($kriteria as $row) : ?>
+                                            <div class="col-md-6">
+                                                <label for="range"><?= $row->kriteria ?></label>
+                                                <input type="hidden" name="id_kriteria[]" value="<?= $row->id ?>">
+                                                <input class="range_5" type="text" name="nilai_kriteria[]" value="<?= !empty($nilai_kriteria[$row->id]) ? $nilai_kriteria[$row->id] : "" ?>">
+                                            </div>
+                                            <?php if ($count % 2 != 0) : ?>
+                                                <div class="w-100"></div>
+                                            <?php endif; ?>
+                                            <?php $count++; ?>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
-                                <?php endforeach; ?>
                                 <div class="form-group">
                                     <label for="komentar">Komentar</label>
                                     <textarea class="form-control" rows="3" name="komentar" placeholder="Berikan pendapat anda tentang calon ini"><?= $komen ?></textarea>

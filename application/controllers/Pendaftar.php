@@ -71,7 +71,7 @@ class Pendaftar extends CI_Controller {
 
     public function profil_calon()
     {
-        $data["calon"] = $this->model_pemira->getCalon();
+        $data["calon"] = $this->model_pemira->getCalonThisYear();
         $this->load->view('Pendaftar/profil_calon', $data);
     }
 
@@ -102,10 +102,11 @@ class Pendaftar extends CI_Controller {
         }
     }
 
-    public function spk()
+    public function kriteria_bobot()
     {
         $data["kriteria"] = $this->model_pemira->getKriteria();
-        $this->load->view('Pendaftar/spk', $data);
+        $data["myKriteria"] = $this->model_pemira->getMyKriteria();
+        $this->load->view('Pendaftar/kriteria_bobot', $data);
     }
 
     public function input_bobot()
@@ -117,6 +118,32 @@ class Pendaftar extends CI_Controller {
                 $this->toastr->error('Gagal Bobot');
             }
             redirect('Pendaftar/spk');
+        }
+    }
+
+    function spk()
+    {
+        $data["calon"] = $this->model_pemira->getCalonThisYear();
+        $data["myKriteria"] = $this->model_pemira->getMyKriteria();
+        $this->load->view('Pendaftar/spk', $data);
+    }
+
+    public function get_bobot_usr($id_kriteria)
+    {
+        $bobotData = $this->model_pemira->getBobotByUser($id_kriteria);
+        if ($bobotData) {
+            // Prepare the data as JSON
+            $jsonResponse = json_encode(array('bobot_value' => $bobotData->bobot));
+            
+            // Set the response content type to JSON
+            $this->output->set_content_type('application/json');
+            
+            // Output the JSON response
+            $this->output->set_output($jsonResponse);
+        } else {
+            // Data not found, return an empty JSON response
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode(array('bobot_value' => '')));
         }
     }
 }

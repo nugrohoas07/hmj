@@ -10,7 +10,7 @@ class Model_pemira extends CI_Model
     }
 
     //mendapatkan calon tahun ini
-    function getCalon()
+    function getCalonThisYear()
     {
         $this->db->where('YEAR(waktu_input)', date('Y'));
         return $this->db->get('calon_ketua')->result();
@@ -88,7 +88,7 @@ class Model_pemira extends CI_Model
 
     //menambah/mengedit jadwal pemira
     function setPemira()
-    { 
+    {
         $post = $this->input->post();
         $this->status = $post["status"];
         $this->kamp_tulis_awal = $post["ktulis_start"];;
@@ -102,7 +102,7 @@ class Model_pemira extends CI_Model
         $this->lok_pemilihan = $post["lokasi_pemilihan"];
         $this->pengumuman = $post["pengumuman"];
         $this->keterangan = $post["info"];
-        if ($this->db->get_where('pemira', array( 'YEAR(waktu_input)' => date('Y') ))->row()) {
+        if ($this->db->get_where('pemira', array('YEAR(waktu_input)' => date('Y')))->row()) {
             $this->db->where('YEAR(waktu_input)', date('Y'));
             return $this->db->update('pemira', $this);
         } else {
@@ -114,7 +114,7 @@ class Model_pemira extends CI_Model
     {
         return $this->db->get('kriteria')->result();
     }
-    
+
     function inputReviewCalon()
     {
         $post = $this->input->post();
@@ -124,27 +124,24 @@ class Model_pemira extends CI_Model
         $nilai_kriteria = $post["nilai_kriteria"];
         $komentar = $post["komentar"];
         $anonim = isset($_POST['anonim']) ? 1 : 0;
-        foreach($id_kriteria as $key => $id)
-        {
-            if(!empty($nilai_kriteria[$key]))
-            {
+        foreach ($id_kriteria as $key => $id) {
+            if (!empty($nilai_kriteria[$key])) {
                 $data = array(
                     'id_user' => $id_user,
                     'id_calon' => $id_calon,
                     'id_kriteria' => $id,
                     'nilai' => $nilai_kriteria[$key]
                 );
-                if($this->cekNilai($id_user,$id_calon,$id))
-                {
+                if ($this->cekNilai($id_user, $id_calon, $id)) {
                     $this->db->where('id_user', $id_user);
                     $this->db->where('id_calon', $id_calon);
                     $this->db->where('id_kriteria', $id);
                     $this->db->update('nilai_calon', $data);
-                }else {
+                } else {
                     $this->db->insert('nilai_calon', $data);
                 }
-            }else {
-                if($this->cekNilai($id_user,$id_calon,$id)){
+            } else {
+                if ($this->cekNilai($id_user, $id_calon, $id)) {
                     $this->db->where('id_user', $id_user);
                     $this->db->where('id_calon', $id_calon);
                     $this->db->where('id_kriteria', $id);
@@ -152,25 +149,22 @@ class Model_pemira extends CI_Model
                 }
             }
         }
-        if(!empty($komentar))
-        {
+        if (!empty($komentar)) {
             $komen = array(
                 'id_user' => $id_user,
                 'id_calon' => $id_calon,
                 'komentar' => $komentar,
                 'anonim' => $anonim
             );
-            if($this->cekReview($id_user, $id_calon))
-            {
+            if ($this->cekReview($id_user, $id_calon)) {
                 $this->db->where('id_user', $id_user);
                 $this->db->where('id_calon', $id_calon);
                 $this->db->update('komentar', $komen);
-            }else {
+            } else {
                 return $this->db->insert('komentar', $komen);
             }
-        }else {
-            if($this->cekReview($id_user, $id_calon))
-            {
+        } else {
+            if ($this->cekReview($id_user, $id_calon)) {
                 $this->db->where('id_user', $id_user);
                 $this->db->where('id_calon', $id_calon);
                 $this->db->delete('komentar');
@@ -217,14 +211,31 @@ class Model_pemira extends CI_Model
         $user_id = $this->session->userdata("username");
         $id_kriteria = $post["id_kriteria"];
         $bobot = $post["bobot"];
-        foreach($id_kriteria as $krit => $id)
-        {
-            $data = array (
+        foreach ($id_kriteria as $krit => $id) {
+            $data = array(
                 'id_user' => $user_id,
                 'id_kriteria' => $id,
                 'bobot' => $bobot[$krit]
             );
             $this->db->insert('bobot', $data);
         }
+    }
+
+    function getBobotByUser($id_kriteria)
+    {
+        $user_id = $this->session->userdata("username");
+        $this->db->where('id_user', $user_id);
+        $this->db->where('id_kriteria', $id_kriteria);
+        return $this->db->get('bobot')->row();
+    }
+
+    function getMyKriteria()
+    {
+        $user_id = $this->session->userdata("username");
+        $this->db->select('bb.id_kriteria, kr.kriteria, bb.bobot');
+        $this->db->from('bobot as bb');
+        $this->db->join('kriteria as kr', 'bb.id_kriteria = kr.id');
+        $this->db->where('bb.id_user', $user_id);
+        return $this->db->get()->result();
     }
 }

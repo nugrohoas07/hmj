@@ -56,7 +56,7 @@ $img = 'https://api.um.ac.id/akademik/operasional/GetFoto.ptikUM?nim=' . $nim . 
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('Pendaftar/spk') ?>" class="nav-link">
+              <a href="<?php echo site_url('Pendaftar/kriteria_bobot') ?>" class="nav-link">
                 <i class="far fa-calendar-alt nav-icon"></i>
                 <p>Hitung</p>
               </a>
