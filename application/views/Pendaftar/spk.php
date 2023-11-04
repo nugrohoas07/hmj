@@ -6,7 +6,8 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= site_url('Pendaftar') ?>">HMJ</a></li>
-                        <li class="breadcrumb-item active">SPK</li>
+                        <li class="breadcrumb-item">Kriteria dan Bobot</li>
+                        <li class="breadcrumb-item active">Perhitungan</li>
                     </ol>
                 </div>
             </div>
@@ -31,6 +32,19 @@
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-one-tabContent">
                                 <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                    <form role="form" action='#' class="form-submit" method="post">
+                                        <?php foreach ($calon as $calon_this_year) : ?>
+                                            <h5>Calon : <?= $calon_this_year->nama ?></h5>
+                                            <?php foreach ($myKriteria as $kriteria_usr) : ?>
+                                                <div class="form-group">
+                                                    <label for="nama"><?= $kriteria_usr->kriteria ?></label>
+                                                    <input type="text" class="form-control" name="nama">
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endforeach; ?>
+                                        <input type="hidden" name="simpan">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                                 </div>

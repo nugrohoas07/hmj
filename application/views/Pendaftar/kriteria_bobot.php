@@ -1,10 +1,4 @@
 <?php section('contents'); ?>
-<?php
-    $selectedKrit = array();
-    foreach ($myKriteria as $dipilih) {
-        $selectedKrit[$dipilih->id_kriteria] = $dipilih->bobot;
-    }
-?>
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -44,7 +38,7 @@
                                                 <label>List Kriteria</label>
                                                 <select class="duallistbox" multiple="multiple">
                                                     <?php foreach ($kriteria as $krit) : ?>
-                                                        <option value="<?= $krit->id ?>" <?php if(isset($selectedKrit[$krit->id])) echo "selected" ?>><?= $krit->kriteria ?></option>
+                                                        <option value="<?= $krit->id ?>"><?= $krit->kriteria ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -54,6 +48,9 @@
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                                     <form role="form" action="<?= site_url('pendaftar/input_bobot') ?>" class="form-submit" method="post">
                                         <div id="dynamic-form"></div>
+                                        <?php foreach ($myKriteria as $kriteria_bf) :  ?>
+                                        <input type="hidden" name="kriteria_before[]" value="<?= $kriteria_bf->id_kriteria ?>">
+                                        <?php endforeach; ?>
                                         <input type="hidden" name="simpan">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
@@ -135,7 +132,7 @@
             })
         });
 
-        $.formUtils.addValidator({
+        $.formUtils.addValidator({ //custom validator untuk total bobot == 100%
             name: 'totalSum100',
             validatorFunction: function(value, $el, config, language, $form) {
                 var $fields = $form.find('[data-validation*="totalSum100"]');
