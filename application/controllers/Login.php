@@ -21,7 +21,7 @@ class Login extends CI_Controller
     //     $this->form_validation->set_rules('userCaptcha', 'Captcha', 'required|callback_cek_captcha');
     //     $cap = $this->create_captcha();
     //     $data['cap_img'] = $cap['image'];
-        
+
     //     //inisialisasi
     //     $a = $b = $hasil = 0;
     //     $str = $cap['word'];
@@ -110,61 +110,61 @@ class Login extends CI_Controller
     {
         $this->load->driver("session");
         $this->load->helper(array('form', 'url', 'captcha', 'security', 'string'));
-        if(isset($_POST['masuk'])){
-            
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-        $this->db2->where('username', $username);
-        $this->db2->where('pwd_hash', md5($password));
-        $query = $this->db2->get('user');
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $user = $this->model_user->getUser($username);
-            if ($user) {
-                $jabatan = $this->model_user->getJabatan($user->jabatan)->jabatan;
-                $status = $user->status;
-            } else {
-                switch ($row->level) {
-                    case "1":
-                    case "2":
-                        $status = "0";
-                        break;
-                    case "11":
-                        $jabatan = "Pendamping";
-                        $status = "1";
-                        break;
-                    default:
-                        $this->toastr->error('Maaf anda tidak diijinkan masuk');
-                        redirect('Login');
-                        break;
+        if (isset($_POST['masuk'])) {
+
+            $username = $this->input->post('username');
+            $password = $this->input->post('password');
+            $this->db2->where('username', $username);
+            $this->db2->where('pwd_hash', md5($password));
+            $query = $this->db2->get('user');
+            if ($query->num_rows() > 0) {
+                $row = $query->row();
+                $user = $this->model_user->getUser($username);
+                if ($user) {
+                    $jabatan = $this->model_user->getJabatan($user->jabatan)->jabatan;
+                    $status = $user->status;
+                } else {
+                    switch ($row->level) {
+                        case "1":
+                        case "2":
+                            $status = "0";
+                            break;
+                        case "11":
+                            $jabatan = "Pendamping";
+                            $status = "1";
+                            break;
+                        default:
+                            $this->toastr->error('Maaf anda tidak diijinkan masuk');
+                            redirect('Login');
+                            break;
+                    }
+                    $idJabatan = $this->model_user->getIdJabatan($jabatan)->id_jabatan;
+                    $data = array(
+                        'username' => $row->username,
+                        'nama' => $row->nama_lengkap,
+                        'email' => $row->email,
+                        'no_hp' => $row->no_hp,
+                        'jabatan' => ($idJabatan) ? $idJabatan  : "",
+                        'status' => $status
+                    );
+                    $this->model_user->update($data, $row->username);
                 }
-                $idJabatan = $this->model_user->getIdJabatan($jabatan)->id_jabatan;
-                $data = array(
+
+                $data_session = array(
+                    'hmj_login' => "1",
                     'username' => $row->username,
                     'nama' => $row->nama_lengkap,
-                    'email' => $row->email,
-                    'no_hp' => $row->no_hp,
-                    'jabatan' => ($idJabatan) ? $idJabatan  : "",
+                    'level' => $row->level,
+                    'jabatan' => ($jabatan) ? $jabatan : null,
+                    'idjabatan' => ($user->jabatan) ? $user->jabatan : null,
                     'status' => $status
                 );
-                $this->model_user->update($data, $row->username);
+                $this->session->set_userdata($data_session);
+                redirect('home');
+            } else {
+                redirect('login');
             }
-
-            $data_session = array(
-                'hmj_login' => "1",
-                'username' => $row->username,
-                'nama' => $row->nama_lengkap,
-                'level' => $row->level,
-                'jabatan' => ($jabatan) ? $jabatan : null,
-                'idjabatan' => ($user->jabatan) ? $user->jabatan : null,
-                'status' => $status
-            );
-            $this->session->set_userdata($data_session);
-            redirect('home');
-        } else {
-            redirect('login');
         }
-    }
         $this->load->view('Loginpage/login');
     }
 }

@@ -37,20 +37,19 @@
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <style type="text/css">
-    
-    /*.tembus{*/
-    /*    background-color: rgb(255, 255, 255, 0.4);*/
-    /*}*/
-    
-    /*.placeholder::-webkit-input-placeholder {*/
-    /*        color: white;*/
-    /*    }*/
-        
-    /*.border {*/
-    /*  border-style: hidden;*/
-    /*  border-radius: 17px;*/
-    /*}*/
-  </style>
+        /*.tembus{*/
+        /*    background-color: rgb(255, 255, 255, 0.4);*/
+        /*}*/
+
+        /*.placeholder::-webkit-input-placeholder {*/
+        /*        color: white;*/
+        /*    }*/
+
+        /*.border {*/
+        /*  border-style: hidden;*/
+        /*  border-radius: 17px;*/
+        /*}*/
+    </style>
 </head>
 
 <!-- <body>  height: 100%;-->
@@ -65,22 +64,22 @@
                     <div style="background-color: rgb(56, 107, 237, 0.5)" class="login-box-body ">
                         <!--
                         <img src="assets/img/logo hmj.png" style="width: 25%; border: 0;" alt=" " />
-                        <b style="color:#fff">HMJ TE FT UM</b>
+                        <b style="color:#fff">HMJ TE FT UM</b> -->
                         
-                        <!-- Divider ->
+                        <!-- Divider
                         <hr class="sidebar-divider">
                         -->
                         <p class="login-box-msg"><b style="color: #fff">Silahkan Masuk</b></p>
                         <form action="<?php echo site_url('login'); ?>" method="post">
                             <?= $this->session->flashdata('message'); ?>
                             <div class="form-group has-feedback">
-                                <input type="text" class="form-control tembus placeholder" placeholder="NIM" name="username" >
+                                <input type="text" class="form-control tembus placeholder" placeholder="NIM" name="username">
                             </div>
                             <div class="form-group has-feedback">
-                                <input type="password" class="form-control tembus placeholder" placeholder="Password" name="password" >
+                                <input type="password" class="form-control tembus placeholder" placeholder="Password" name="password">
                             </div>
                             <!--<div class="form-group row">-->
-                                <!-- mb-3 mb-sm-0 -->
+                            <!-- mb-3 mb-sm-0 -->
                             <!--    <div class="col-sm-6 "><label><!?= $cap_img ?></label></div>-->
                             <!--    <div class="col-sm-6"><input type="text" class="form-control tembus placeholder" id="Captcha" name="userCaptcha" placeholder="Masukkan Hasil">-->
                             <!--        <small style="color:#FFF; font-size:small"><?= form_error('userCaptcha'); ?></small>-->

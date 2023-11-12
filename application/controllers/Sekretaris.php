@@ -194,7 +194,7 @@ class Sekretaris extends CI_Controller
     public function profil_calon()
     {
 
-        $data["calon"] = $this->model_pemira->getCalon();
+        $data["calon"] = $this->model_pemira->getCalonThisYear();
         $this->load->view('Sekretaris/profil_calon', $data);
     }
 

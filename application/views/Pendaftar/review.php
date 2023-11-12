@@ -41,7 +41,7 @@ $anonim = !empty($komentar->anonim) ? $komentar->anonim : "";
                                         <?php $count = 0; ?>
                                         <?php foreach ($kriteria as $row) : ?>
                                             <div class="col-md-6">
-                                                <label for="range"><?= $row->kriteria ?></label>
+                                                <label for="nilai_kriteria[]"><?= $row->kriteria ?></label>
                                                 <input type="hidden" name="id_kriteria[]" value="<?= $row->id ?>">
                                                 <input class="range_5" type="text" name="nilai_kriteria[]" value="<?= !empty($nilai_kriteria[$row->id]) ? $nilai_kriteria[$row->id] : "" ?>">
                                             </div>

@@ -265,4 +265,30 @@ class Model_pemira extends CI_Model
         $this->db->where('bb.id_user', $user_id);
         return $this->db->get()->result();
     }
+
+    function getCalonNilaiByKriteria($id_calon, $id_kriteria)
+    {
+        $this->db->select('id_kriteria, nilai, COUNT(DISTINCT id_user) as voter');
+        $this->db->from('nilai_calon');
+        $this->db->where('id_calon', $id_calon);
+        $this->db->where('id_kriteria', $id_kriteria);
+        $this->db->group_by('id_kriteria, nilai');
+        $this->db->order_by('nilai', 'ASC');
+        return $this->db->get()->result();
+    }
+
+    function getKomentarByCalonNim($nim)
+    {
+        $this->db->select('usr.nama, komen.komentar, komen.anonim');
+        $this->db->from('komentar as komen');
+        $this->db->join('user as usr', 'komen.id_user = usr.username');
+        $this->db->where('komen.id_calon', $nim);
+        return $this->db->get()->result();
+    }
+
+    function getTotalCommentsByCalon($nim)
+    {
+        $this->db->where('id_calon', $nim);
+        return $this->db->get('komentar')->num_rows();
+    }
 }

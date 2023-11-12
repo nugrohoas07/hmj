@@ -1,21 +1,22 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pendaftar extends CI_Controller {
+class Pendaftar extends CI_Controller
+{
 
     public function __construct()
     {
-		parent::__construct();
-		$this->load->model(array('model_user','model_proker','model_pemira'));
+        parent::__construct();
+        $this->load->model(array('model_user', 'model_proker', 'model_pemira'));
         $this->load->library('form_validation');
         cek_session();
-	}
+    }
 
-	public function index()
-	{
+    public function index()
+    {
         $data["pemira"] = $this->db->get_where('pemira', ["YEAR(waktu_input)" => date('Y')])->row();
         $data["info"] = $this->db->get_where('pendaftaran', ["id" => "pendaftaran"])->row();
-        $this->load->view('Pendaftar/index',$data);
+        $this->load->view('Pendaftar/index', $data);
     }
 
     function daftar()
@@ -32,7 +33,7 @@ class Pendaftar extends CI_Controller {
             if (!$terima) {
                 if (!$daftar) {
                     if (empty($info) || $info->status == "1" || $date < $info->pengumpulan_awal || $date > $info->pengumpulan_akhir) {
-                    // if ((!empty($info)) || $info->status == "0" || ($date <= $info->pengumpulan_awal && $date >= $info->pengumpulan_akhir)) {
+                        // if ((!empty($info)) || $info->status == "0" || ($date <= $info->pengumpulan_awal && $date >= $info->pengumpulan_akhir)) {
                         $this->toastr->error('Pendaftaran Ditutup');
                         redirect('pendaftar');
                     } else {
@@ -62,7 +63,8 @@ class Pendaftar extends CI_Controller {
         }
     }
 
-    function listDivisi($id_bidang){
+    function listDivisi($id_bidang)
+    {
         $data = $this->model_user->getDivisibyBidang($id_bidang);
         echo json_encode($data);
     }
@@ -77,7 +79,9 @@ class Pendaftar extends CI_Controller {
 
     public function detail_calon($nim)
     {
+        $data["komentar"] = $this->model_pemira->getKomentarByCalonNim($nim);
         $data["calon"] = $this->model_pemira->getSpesificCalon($nim);
+        $data["kriteria"] = $this->model_pemira->getKriteria();
         $this->load->view('Pendaftar/detail_calon', $data);
     }
 
@@ -134,16 +138,29 @@ class Pendaftar extends CI_Controller {
         if ($bobotData) {
             // Prepare the data as JSON
             $jsonResponse = json_encode(array('bobot_value' => $bobotData->bobot));
-            
+
             // Set the response content type to JSON
             $this->output->set_content_type('application/json');
-            
+
             // Output the JSON response
             $this->output->set_output($jsonResponse);
         } else {
             // Data not found, return an empty JSON response
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode(array('bobot_value' => '')));
+        }
+    }
+
+    function getCalonNilaiByIdKriteria($id_calon, $id_kriteria)
+    {
+        $nilai = $this->model_pemira->getCalonNilaiByKriteria($id_calon, $id_kriteria);
+        if ($nilai) {
+            $jsonResponse = json_encode($nilai);
+            $this->output->set_content_type('application/json');
+            $this->output->set_output($jsonResponse);
+        } else {
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode(''));
         }
     }
 }

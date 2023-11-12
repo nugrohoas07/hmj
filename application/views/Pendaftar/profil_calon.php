@@ -22,7 +22,7 @@
                     <div class="card-body box-profile">
                         <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle"
-                            src="../upload/foto/<?= $row->foto ?>"
+                            src="<?= base_url('upload/') ?>foto/<?= $row->foto ?>"
                             onerror="this.src='<?= base_url('assets/') ?>dist/img/default.png'"
                             alt="Foto Calon">
                         </div>
